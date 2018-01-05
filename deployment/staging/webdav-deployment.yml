@@ -1,0 +1,66 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webdav
+  namespace: kube-system
+spec:
+  replicas: 1
+  revisionHistoryLimit: 2
+  template:
+    metadata:
+      labels:
+        app: webdav
+    spec:
+      containers:
+      - name: webdav
+        image: tapxxor/webdav:0.1.0
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3s
+        resources:
+          requests:
+            memory: "100Mi"
+            cpu: "100m"
+          limits:
+            memory: "200Mi"
+            cpu: "200m"
+        volumeMounts:
+        - mountPath: /uploads
+          name: webdav-storage
+        env:
+          - name: BASIC_AUTH
+            value: True
+          - name: WEBDAV_LOGGIN
+            value: info
+          - name: WEBDAV_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: webdav-secret
+                key: user
+          - name: WEBDAV_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: webdav-secret
+                key: password
+      volumes:
+      - name: webdav-storage
+        persistentVolumeClaim:
+          claimName: webdav-pvc
+      restartPolicy: Always
+      # uncomment if registry keys are specified
+      #imagePullSecrets:
+      #- name: <secret_name>

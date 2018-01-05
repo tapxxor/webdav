@@ -1,10 +1,11 @@
-FROM alpine:3.7
+FROM alpine:3.6
 
 MAINTAINER tapxxor theofanis.pispirigkos@gmail.com
 
+ENV SERVER_NAME webdav.kube-system.svc.cluster.local 
 ENV DAV_CONF /etc/apache2/conf.d/dav.conf
 ENV HTTPD_CONF /etc/apache2/httpd.conf
-ENV SERVER_NAME webdav.kube-system.svc.cluster.local 
+ENV PASSWD /usr/user.passwd
 ENV REALM webdav
 
 ADD entrypoint.sh .
@@ -20,18 +21,7 @@ RUN apk add --no-cache apache2-webdav apache2-utils
 # create the upload folder
 RUN mkdir -p /uploads     \
     && chmod 770 /uploads \
-    && chown -R www-data:www-data /uploads   
-
-RUN sed -i -e 's#Alias /uploads \"/usr/uploads\"#Alias /uploads \"/uploads\"#g' $DAV_CONF \
-    && sed -i -e 's#AuthType Digest#AuthType Basic#g' $DAV_CONF        \
-    && sed -i -e 's#/usr/uploads#/uploads#g' $DAV_CONF                 \
-    && sed -i -e 's#user admin#valid-user#g' $DAV_CONF                 \
-    && sed -i -e 's#<RequireAny>#<LimitExcept GET>#g' $DAV_CONF        \
-    && sed -i -e 's#<\/RequireAny>#<\/LimitExcept>#g' $DAV_CONF        \
-    && sed -i -e 's#Require method#\#Require method#g' $DAV_CONF       \
-    && sed -i -e 's#AuthName DAV-upload#AuthName '"${REALM}"'#g' $DAV_CONF \
-    && echo "ServerName $SERVER_NAME" >> $HTTPD_CONF                       \
-    && sed -i -e '/<\/Directory>/ a \\n<Directory "/">\n  AuthType None\n  Require all granted\n</Directory>' $DAV_CONF              
+    && chown -R www-data:www-data /uploads             
    
 # The User/Group specified in httpd.conf needs to have write permissions
 # on the directory where the DavLockDB is placed and on any directory where
