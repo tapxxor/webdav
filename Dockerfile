@@ -32,7 +32,6 @@ RUN sed -i -e 's#Alias /uploads \"/usr/uploads\"#Alias /uploads \"/uploads\"#g' 
     && sed -i -e 's#AuthName DAV-upload#AuthName '"${REALM}"'#g' $DAV_CONF \
     && echo "ServerName $SERVER_NAME" >> $HTTPD_CONF                       \
     && sed -i -e '/<\/Directory>/ a \\n<Directory "/">\n  AuthType None\n  Require all granted\n</Directory>' $DAV_CONF              
-# && sed -i -e 's/^[ \t]*Dav On/Require all granted \n Dav On/' $DAV_CONF               \
    
 # The User/Group specified in httpd.conf needs to have write permissions
 # on the directory where the DavLockDB is placed and on any directory where
