@@ -17,10 +17,10 @@ spec:
         image: tapxxor/webdav:alpine-3.6
         ports:
         - containerPort: 80
-        lifecycle:
-          preStop:
-          exec:
-            command: ["apachectl","stop"]
+        # lifecycle:
+        #   preStop:
+        #   exec:
+        #     command: ["apachectl","stop"]
         livenessProbe:
           httpGet:
             path: /

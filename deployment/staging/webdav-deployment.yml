@@ -1,5 +1,5 @@
 ---
-apiVersion: batch/v1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: webdav
@@ -17,10 +17,10 @@ spec:
         image: tapxxor/webdav:alpine-3.6
         ports:
         - containerPort: 80
-        lifecycle:
-          preStop:
-          exec:
-            command: ["apachectl","stop"]
+        # lifecycle:
+        #   preStop:
+        #   exec:
+        #     command: ["apachectl","stop"]
         livenessProbe:
           httpGet:
             path: /
@@ -34,7 +34,7 @@ spec:
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 10
-          failureThreshold: 3s
+          failureThreshold: 3
         resources:
           requests:
             memory: "100Mi"
@@ -47,19 +47,19 @@ spec:
           name: webdav-storage
         env:
           - name: BASIC_AUTH
-            value: True
+            value: "True"
           - name: WEBDAV_LOGGIN
-            value: info
+            value: "info"
           - name: WEBDAV_USERNAME
             valueFrom:
               secretKeyRef:
                 name: webdav-secret
-                key: user
+                key: "user"
           - name: WEBDAV_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: webdav-secret
-                key: password
+                key: "password"
       volumes:
       - name: webdav-storage
         persistentVolumeClaim:
