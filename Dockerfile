@@ -28,8 +28,8 @@ RUN mkdir -p /uploads     \
 # "Dav On" is specified.
 RUN mkdir -p /run/apache2     \
     && mkdir -p /var/lib/dav  \
-    && chown www-data:www-data /var/lib/dav  \
-    && chmod 770 /var/lib/dav                \
+    && chown www-data:www-data /var/lib/dav \
+    && chmod 770 /var/lib/dav               \
     && chmod 755 /entrypoint.sh
 
 EXPOSE 80 
