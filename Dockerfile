@@ -2,7 +2,6 @@ FROM alpine:3.7
 
 MAINTAINER tapxxor theofanis.pispirigkos@gmail.com
 
-
 ENV DAV_CONF /etc/apache2/conf.d/dav.conf
 ENV HTTPD_CONF /etc/apache2/httpd.conf
 ENV SERVER_NAME webdav.kube-system.svc.cluster.local 
