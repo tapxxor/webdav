@@ -17,6 +17,10 @@ spec:
         image: tapxxor/webdav:0.1.0
         ports:
         - containerPort: 80
+        lifecycle:
+          preStop:
+          exec:
+            command: ["apachectl","stop"]
         livenessProbe:
           httpGet:
             path: /
