@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: webdav
-        image: tapxxor/webdav:3.6.0
+        image: tapxxor/webdav:alpine-3.6
         ports:
         - containerPort: 80
         lifecycle:

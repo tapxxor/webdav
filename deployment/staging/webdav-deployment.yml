@@ -1,5 +1,5 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: batch/v1
 kind: Deployment
 metadata:
   name: webdav
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: webdav
-        image: tapxxor/webdav:0.1.0
+        image: tapxxor/webdav:alpine-3.6
         ports:
         - containerPort: 80
         lifecycle:
