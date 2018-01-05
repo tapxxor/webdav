@@ -14,9 +14,13 @@ spec:
     spec:
       containers:
       - name: webdav
-        image: tapxxor/webdav:0.1.0
+        image: tapxxor/webdav:3.6.0
         ports:
         - containerPort: 80
+        lifecycle:
+          preStop:
+          exec:
+            command: ["apachectl","stop"]
         livenessProbe:
           httpGet:
             path: /
@@ -30,7 +34,7 @@ spec:
             port: 80
           initialDelaySeconds: 10
           periodSeconds: 10
-          failureThreshold: 3s
+          failureThreshold: 3
         resources:
           requests:
             memory: "100Mi"
@@ -43,23 +47,23 @@ spec:
           name: webdav-storage
         env:
           - name: BASIC_AUTH
-            value: True
+            value: "True"
           - name: WEBDAV_LOGGIN
-            value: info
+            value: "info"
           - name: WEBDAV_USERNAME
             valueFrom:
               secretKeyRef:
                 name: webdav-secret
-                key: user
+                key: "user"
           - name: WEBDAV_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: webdav-secret
-                key: password
+                key: "password"
       volumes:
       - name: webdav-storage
-        persistentVolumeClaim:
-          claimName: webdav-pvc
+        emptyDir: 
+          medium: "Memory"
       restartPolicy: Always
       # uncomment if registry keys are specified
       #imagePullSecrets:
