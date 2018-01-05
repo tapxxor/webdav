@@ -16,7 +16,7 @@ RUN set -x \
     && adduser -u 82 -D -S -G www-data www-data
 
 # add webdav and apache
-RUN apk add --no-cache apache2-webdav apache2-utils
+RUN apk add --no-cache apache2-webdav=2.4.27-r1 apache2-utils=2.4.27-r1
 
 # create the upload folder
 RUN mkdir -p /uploads     \
