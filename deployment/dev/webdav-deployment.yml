@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
       - name: webdav
-        image: tapxxor/webdav:alpine-3.6
+        image: tapxxor/webdav:alpine-3.7
         ports:
         - containerPort: 80
         # lifecycle:
         #   preStop:
         #   exec:
-        #     command: ["apachectl","stop"]
+        #     command: ["/usr/sbin/httpd","-k","graceful-stop"]
         livenessProbe:
           httpGet:
             path: /
